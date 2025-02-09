@@ -3,16 +3,17 @@
 {% block content %}
 <div class="d-flex justify-content-center mt-5">
 
-    {% comment %} {% for message in messages  %}
+    <form action="/auth/signup/" method="POST" class="border p-4 rounded shadow-sm"
+        style="width: 100%; max-width: 400px;">
+
+        {% for message in messages  %}
     <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
       <strong>{{message}}</strong>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     
-    {% endfor %} {% endcomment %}
+    {% endfor %}
 
-    <form action="auth/signup/" method="POST" class="border p-4 rounded shadow-sm"
-        style="width: 100%; max-width: 400px;">
         <h3 class="mb-5 mt-3">Signup</h3>
         {% csrf_token %}
 

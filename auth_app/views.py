@@ -18,12 +18,31 @@ def signup(request):
             return render(request,'signup.html')
         try:
             if User.objects.get(username=email):
-                return HttpResponse('user is already exist')
+                messages.info(request,'Email is taken')
+                return render(request,'signup.html')
         except Exception as identifier:
             pass
-
         user = User.objects.create_user(email,email,password) # first one is for username but here we take it as email 
+        user.is_active=False
         user.save() 
+        email.subject='activate your account'
+        messages=render_to_string('activate.html',{
+            'user':user,
+            'domain':'127.0.0.1:8000',
+            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+            'token':generate_token.make_token(user)
+        }) 
+
+
+
+
+
+
+
+
+
+
+
         return HttpResponse('user created',email)
 
     return render(request,'signup.html')
