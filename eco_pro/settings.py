@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 from django.contrib import messages
 
@@ -121,12 +122,15 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-import os
+
 # manually added
 STATICFILES_DIRS = [
     # BASE_DIR / "static"
     os.path.join(BASE_DIR / "static")
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Default primary key field type
@@ -136,12 +140,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #  {}
 # _
-MESSAGE_TAGS={
-    messages.ERROR:'danger'
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
 }
 
 
-# sending emails 
+# sending emails
 # settings.py
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -149,4 +153,3 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'vt444713@gmail.com'
 EMAIL_HOST_PASSWORD = 'Vish@l312'  # Use App Password for security
-

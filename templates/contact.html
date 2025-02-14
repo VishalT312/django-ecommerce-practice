@@ -3,6 +3,38 @@
 {% block title %}Contact{% endblock title %}
 {% block body %}
 
-this is contact page
+<div class="container mt-5">
+  {% for message in messages  %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+      <strong>{{message}}</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    
+    {% endfor %}
+
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form action="/contact" method="post">
+        {% csrf_token %}
+        <label for="name" class="mt-2">Full Name</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name">
+
+        <label for="email" class="mt-2">Enter Your Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{user.email}}" placeholder="Enter your Email">
+
+        <label for="pnumber" class="mt-2">Phone Number</label>
+        <input type="number" class="form-control" id="pnumber" name="pnumber" placeholder="0123456789">
+        
+        <label for="desc" class="mt-2">How can i help you?</label>
+        <textarea class="form-control" id="desc" name="desc" rows="3"></textarea>
+        
+        <button type="submit" class="btn btn-primary mt-3 mb-3">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
 
 {% endblock body %}

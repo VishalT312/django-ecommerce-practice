@@ -1,58 +1,58 @@
-from django.shortcuts import render,redirect,HttpResponse
-from django.contrib.auth.models import User 
+from django.shortcuts import render, redirect, HttpResponse
+from django.contrib.auth.models import User
+from django.views.generic import View
 from django.contrib import messages
+from django.contrib.auth import login, logout, authenticate
+
 
 # Create your views here.
 
-# ()
-
-# :
 
 def signup(request):
     if request.method == 'POST':
+        username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
         confirm_password = request.POST['confirm-password']
+
         if password != confirm_password:
-            messages.warning(request,'Password is not matching.')
-            return render(request,'signup.html')
-        try:
-            if User.objects.get(username=email):
-                messages.info(request,'Email is taken')
-                return render(request,'signup.html')
-        except Exception as identifier:
-            pass
-        user = User.objects.create_user(email,email,password) # first one is for username but here we take it as email 
-        user.is_active=False
-        user.save() 
-        email.subject='activate your account'
-        messages=render_to_string('activate.html',{
-            'user':user,
-            'domain':'127.0.0.1:8000',
-            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-            'token':generate_token.make_token(user)
-        }) 
+            messages.warning(request, 'Passwords do not match.')
+            return render(request, 'signup.html')
 
+        if User.objects.filter(username=email).exists():
+            messages.info(request, 'Email is already taken.')
+            return render(request, 'signup.html')
 
+        user = User.objects.create_user(
+            username=username, email=email, password=password)
+        user.save()
+        messages.success(
+            request, 'Account created successfully. Please log in.')
 
+        return redirect('login')
 
-
-
-
-
-
-
-
-        return HttpResponse('user created',email)
-
-    return render(request,'signup.html')
-
-
-
+    return render(request, 'signup.html')
 
 
 def handlelogin(request):
-    return render(request,'login.html')
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            messages.success(request, 'Login Succesfull')
+            return redirect('/')
+        else:
+            messages.error(request, 'Invalid Credentils')
+            return render(request, 'login.html')
+
+    return render(request, 'login.html')
+
 
 def handlelogout(request):
-    return redirect('/auth/login')
+    logout(request)
+    messages.success(request, 'Logged out successfully')
+    return redirect('login')
+
+
